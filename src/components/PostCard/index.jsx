@@ -199,7 +199,7 @@ const PostCard = ({ imageData }) => {
                 </Badge>
               </IconButton>
 
-              {showShareButton && (
+              {showShareButton && userInfo !== null && (
                 <IconButton onClick={handleDownload}>
                   <DownloadOutlined />
                 </IconButton>
