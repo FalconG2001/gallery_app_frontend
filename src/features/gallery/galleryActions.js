@@ -255,3 +255,33 @@ export const getImagesInAlbum = createAsyncThunk(
     }
   }
 );
+
+export const getAllTags = createAsyncThunk(
+  "gallery/tags",
+  async ({ page, limit }) => {
+    try {
+      const uri = `${baseUrl}${galleryUrls.getAllTags}?page=${page}&limit=${limit}`;
+      const res = await axios.get(uri);
+
+      return res?.data;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+export const searchTags = createAsyncThunk(
+  "gallery/searchTags",
+  async ({ search }) => {
+    try {
+      const uri = `${baseUrl}${galleryUrls.searchTags.replace(
+        ":search",
+        search
+      )}`;
+      const res = await axios.get(uri);
+
+      return res?.data;
+    } catch (error) {
+      return error;
+    }
+  }
+);

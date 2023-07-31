@@ -10,6 +10,8 @@ export const galleryUrls = {
   createAlbum: "gallery/albums",
   addImageToAlbum: "gallery/albums/:id/images",
   getImagesInAlbum: "gallery/albums/:id",
+  getAllTags: "tags",
+  searchTags: "tags/:search",
 };
 
 export const baseUrl = process.env.REACT_APP_BACKEND_URL;

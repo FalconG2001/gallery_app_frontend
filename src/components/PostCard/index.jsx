@@ -62,10 +62,6 @@ const PostCard = ({ imageData }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const isOpen = Boolean(anchorEl);
 
-  // if (isOpen) {
-  //   dispatch(getAllAlbums({ userToken }));
-  // }
-
   /**
    *
    * Functions

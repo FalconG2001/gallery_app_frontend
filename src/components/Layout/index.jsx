@@ -27,7 +27,11 @@ import {
   useTheme,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { setMode, setLogout } from "./../../features/auth/authSlice";
+import {
+  setMode,
+  setLogout,
+  resetError,
+} from "./../../features/auth/authSlice";
 import { Outlet, useNavigate } from "react-router-dom";
 import FormPage from "../UploadForm";
 import LoadingComponent from "./../LoadingComponent";
@@ -35,10 +39,13 @@ import {
   fetchGalleryPosts,
   searchByeName,
 } from "../../features/gallery/galleryActions";
+import { ErrorHandler } from "../HandleError";
 
 const Navbar = () => {
   const { userInfo } = useSelector((state) => state.auth);
   const { postStatus, page, limit } = useSelector((state) => state.gallery);
+  const { error } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
@@ -70,6 +77,12 @@ const Navbar = () => {
   const searchChange = (e) => {
     setSearch(e.target.value);
   };
+
+  if (error !== null) {
+    setTimeout(() => {
+      if (error !== null) dispatch(resetError());
+    }, 5000);
+  }
 
   return (
     <>
@@ -189,7 +202,14 @@ const Navbar = () => {
                   anchorEl={anchorEl}
                   open={isOpen}
                   onClose={handleClose}
-                  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
                 >
                   <MenuItem onClick={() => dispatch(setLogout())}>
                     Log Out
@@ -202,7 +222,7 @@ const Navbar = () => {
       </AppBar>
       <FormPage open={open} setOpen={setOpen} />
       {postStatus === "loading" ? <LoadingComponent /> : <div></div>}
-
+      {error !== null ? <ErrorHandler err={error} /> : <div></div>}
       <Outlet />
     </>
   );

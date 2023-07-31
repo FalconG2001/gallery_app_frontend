@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Container,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-  FormControl,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import PostCard from "./../../components/PostCard";
 import { fetchGalleryPosts } from "../../features/gallery/galleryActions";
 import { useDispatch, useSelector } from "react-redux";
-import FlexBetween from "../../components/flexBetween";
-import { NavigateBefore, NavigateNext } from "@mui/icons-material";
-import { setPage, setSort } from "../../features/gallery/gallerySlice";
+import { setSort } from "../../features/gallery/gallerySlice";
+import FilterTags from "../../components/SelectLazyLoad";
+import Sort from "../../components/SortComponent";
+import Pagination from "../../components/PaginationComponent";
 
 const Gallery = () => {
   const dispatch = useDispatch();
@@ -59,25 +51,8 @@ const Gallery = () => {
           marginBottom: "1rem",
         }}
       >
-        <FormControl
-          sx={{
-            width: "100px",
-          }}
-        >
-          <InputLabel id="sort-label">Sort</InputLabel>
-          <Select
-            value={filter}
-            onChange={handleFilterChange}
-            id="sort"
-            labelId="sort-label"
-            label="Sort"
-          >
-            <MenuItem value="">None</MenuItem>
-            <MenuItem value="title">Title</MenuItem>
-            <MenuItem value="date">Date</MenuItem>
-            <MenuItem value="likes">Likes</MenuItem>
-          </Select>
-        </FormControl>
+        <FilterTags />
+        <Sort filter={filter} handleFilterChange={handleFilterChange} />
       </Box>
 
       <Box display={"grid"} gridTemplateColumns="repeat(12, 1fr)" gap={4}>
@@ -87,57 +62,13 @@ const Gallery = () => {
               display={"flex"}
               justifyContent={"center"}
               gridColumn="span 3"
-              key={post.id}
+              key={post?.id}
             >
               <PostCard imageData={post} />
             </Box>
           ))}
       </Box>
-      <Container
-        sx={{
-          width: "20vw",
-          marginTop: "1.5rem",
-        }}
-      >
-        <FlexBetween>
-          <Box
-            display={"flex"}
-            flexDirection={"column"}
-            justifyContent={"center"}
-            alignContent={"center"}
-          >
-            <IconButton
-              onClick={() => dispatch(setPage({ action: "prev" }))}
-              disabled={prev}
-            >
-              <NavigateBefore />
-            </IconButton>
-            <Typography>Prev</Typography>
-          </Box>
-          <Box
-            display={"flex"}
-            flexDirection={"column"}
-            justifyContent={"center"}
-            alignContent={"center"}
-          >
-            <Typography>{page}</Typography>
-          </Box>
-          <Box
-            display={"flex"}
-            flexDirection={"column"}
-            justifyContent={"center"}
-            alignContent={"center"}
-          >
-            <IconButton
-              onClick={() => dispatch(setPage({ action: "next" }))}
-              disabled={next}
-            >
-              <NavigateNext />
-            </IconButton>
-            <Typography>Next</Typography>
-          </Box>
-        </FlexBetween>
-      </Container>
+      <Pagination page={page} prev={prev} next={next} />
     </div>
   );
 };

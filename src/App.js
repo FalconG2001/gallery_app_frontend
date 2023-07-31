@@ -18,7 +18,7 @@ function App() {
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
 
   return (
-    <div>
+    <>
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
@@ -36,7 +36,7 @@ function App() {
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
-    </div>
+    </>
   );
 }
 

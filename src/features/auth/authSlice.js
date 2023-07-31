@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { userLogin, userSignUp, hydrateMe } from "./authActions";
-// import { modelActionUpdates } from "./authActions";
 
 const initialState = {
   mode: "light",
@@ -38,6 +37,17 @@ export const authSlice = createSlice({
       state.userInfo.images = state.userInfo.images?.filter(
         (imgs) => imgs !== action.payload
       );
+    },
+    setError: (state, action) => {
+      state.success = null;
+      state.error = {
+        status: action.payload.status,
+        statusText: action.payload.statusText,
+        message: action.payload.data.message,
+      };
+    },
+    resetError: (state) => {
+      state.error = null;
     },
   },
   extraReducers: {
@@ -83,6 +93,13 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setMode, setLogout, setLike, setUpdateImages, setDeleteImage } =
-  authSlice.actions;
+export const {
+  setMode,
+  setLogout,
+  setLike,
+  setUpdateImages,
+  setDeleteImage,
+  setError,
+  resetError,
+} = authSlice.actions;
 export default authSlice.reducer;

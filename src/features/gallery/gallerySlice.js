@@ -12,6 +12,8 @@ import {
   createNewAlbum,
   addImageToAlbum,
   getImagesInAlbum,
+  getAllTags,
+  searchTags,
 } from "./galleryActions";
 
 const initialState = {
@@ -22,6 +24,7 @@ const initialState = {
   comments: [],
   favourites: [],
   addToAlbums: [],
+  tags: [],
   page: 1,
   limit: 12,
   sort: "",
@@ -61,6 +64,15 @@ export const gallerySlice = createSlice({
     },
     initiateAddToAlbum: (state) => {
       state.addToAlbums = [];
+    },
+    setTagFilter: (state, action) => {
+      if (action.payload.filter === "none") {
+        state.sort = state.sort !== "" ? "" : "date";
+      } else {
+        state.posts = state.posts.filter((post) =>
+          post.tags.includes(action.payload.filter)
+        );
+      }
     },
   },
   extraReducers(builder) {
@@ -205,13 +217,26 @@ export const gallerySlice = createSlice({
       .addCase(getImagesInAlbum.rejected, (state, action) => {
         state.postStatus = "failed";
         state.error = action.error.message;
+      })
+      .addCase(getAllTags.fulfilled, (state, action) => {
+        state.postStatus = "success";
+        state.tags = action.payload.data;
+        state.tags = state.tags.filter((tag) => tag.images?.length > 0);
+      })
+      .addCase(getAllTags.rejected, (state, action) => {
+        state.postStatus = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(searchTags.fulfilled, (state, action) => {
+        state.postStatus = "success";
+        state.tags = action.payload.tags;
+      })
+      .addCase(searchTags.rejected, (state, action) => {
+        state.postStatus = "failed";
+        state.error = action.error.message;
       });
   },
 });
-
-export const selectAllPosts = (state) => state.gallery.posts;
-export const getPostsError = (state) => state.gallery.error;
-export const getPostStatus = (state) => state.gallery.postStatus;
 
 export const {
   setInitiateComments,
@@ -219,5 +244,6 @@ export const {
   setLimit,
   setFavourites,
   setSort,
+  setTagFilter,
 } = gallerySlice.actions;
 export default gallerySlice.reducer;
